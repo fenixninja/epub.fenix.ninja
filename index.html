@@ -29,6 +29,10 @@
   <meta name="msapplication-TileColor" content="#ffffff" />
   <meta name="msapplication-TileImage" content="fenix_icons/ms-icon-144x144.png" />
   <meta name="theme-color" content="#2563eb" />
+  <!-- Google Fonts para Branding FNX EPUB (Alfa Slab One & Fredoka) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
   <!-- Interceptar 'unload' y redirigir a 'pagehide' para cumplir con Permissions-Policy y compatibilidad con bfcache -->
   <script>
@@ -71,7 +75,10 @@
         </label>
       </div>
 
-      <h1 data-i18n="app_title">FNX EPUB</h1>
+      <h1 class="brand-title" data-i18n="app_title">
+        <span class="brand-fnx">FNX</span>
+        <span class="brand-epub-badge">EPUB</span>
+      </h1>
       <p class="subtitle" data-i18n="app_subtitle">Lector de libros EPUB</p>
 
       <div class="drop-zone" id="drop-zone">

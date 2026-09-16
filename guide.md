@@ -39,6 +39,10 @@ Define las dos pantallas principales de la aplicación, el pie de página de aut
 
 1. **Pantalla de Inicio (`#start-screen`):**
    * `.start-lang-bar`: Barra superior de la tarjeta con selector de idioma (`#start-lang-select.i18n-select`) e icono de globo 🌐.
+   * `.brand-title` (`h1`): Título con diseño retro vintage fiel a la guía de marca ([brand.md](file:///Users/fenixrios/Documents/CODIGO/epub-reader/brand.md)):
+     * `.brand-fnx`: Tipografía *Slab Serif* (`Alfa Slab One`) con color coral/rosa suave (`#ED7A82`), ligera rotación e impacto visual con sombras sólidas estilo pop art retro.
+     * `.brand-epub-badge`: Cápsula redondeada en tono verde menta pastel (`#95D4B2`) con tipografía *Fredoka Sans*, contorno carbón (`#2A2A35`) y sombra dura vintage.
+   * `.subtitle` (`p`): Subtítulo ("EPUB Book Reader" / "Lector de libros EPUB") con tipografía *Fredoka*, espaciado editorial, líneas guía en azul pervinca (`#8789C4`) y soporte multilenguaje sincronizado.
    * `#drop-zone`: Zona interactiva para soltar archivos arrastrados con imagen de fondo estética (`img/libro.jpeg` / `img/epub.jpeg`) y superposición traslúcida adaptativa por tema.
    * `#file-input`: Input nativo oculto (`<input type="file" accept=".epub">`) accionado por la etiqueta interactiva "Elegir archivo".
    * `#url-input` y `#load-url-btn`: Campo de texto y botón para cargar libros mediante un enlace web público o ruta relativa (`./libros/libro.epub`).

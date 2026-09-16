@@ -3,7 +3,7 @@ const I18N_TRANSLATIONS = {
   es: {
     meta: { name: "Español", flag: "🇪🇸" },
     page_title: "FNX EPUB",
-    app_title: "FNX EPUB",
+    app_title: '<span class="brand-fnx">FNX</span> <span class="brand-epub-badge">EPUB</span>',
     app_subtitle: "Lector de libros EPUB",
     drop_title: "Arrastra un archivo <strong>.epub</strong> aquí",
     drop_or: "o",
@@ -69,7 +69,7 @@ const I18N_TRANSLATIONS = {
   en: {
     meta: { name: "English", flag: "🇺🇸" },
     page_title: "FNX EPUB",
-    app_title: "FNX EPUB",
+    app_title: '<span class="brand-fnx">FNX</span> <span class="brand-epub-badge">EPUB</span>',
     app_subtitle: "EPUB Book Reader",
     drop_title: "Drag an <strong>.epub</strong> file here",
     drop_or: "or",
@@ -135,7 +135,7 @@ const I18N_TRANSLATIONS = {
   de: {
     meta: { name: "Deutsch", flag: "🇩🇪" },
     page_title: "FNX EPUB",
-    app_title: "FNX EPUB",
+    app_title: '<span class="brand-fnx">FNX</span> <span class="brand-epub-badge">EPUB</span>',
     app_subtitle: "EPUB-Buchleser",
     drop_title: "Ziehe eine <strong>.epub</strong>-Datei hierher",
     drop_or: "oder",
@@ -201,7 +201,7 @@ const I18N_TRANSLATIONS = {
   fr: {
     meta: { name: "Français", flag: "🇫🇷" },
     page_title: "FNX EPUB",
-    app_title: "FNX EPUB",
+    app_title: '<span class="brand-fnx">FNX</span> <span class="brand-epub-badge">EPUB</span>',
     app_subtitle: "Lecteur de livres EPUB",
     drop_title: "Glissez un fichier <strong>.epub</strong> ici",
     drop_or: "ou",
@@ -267,7 +267,7 @@ const I18N_TRANSLATIONS = {
   hi: {
     meta: { name: "हिन्दी", flag: "🇮🇳" },
     page_title: "FNX EPUB",
-    app_title: "FNX EPUB",
+    app_title: '<span class="brand-fnx">FNX</span> <span class="brand-epub-badge">EPUB</span>',
     app_subtitle: "EPUB पुस्तक पाठक",
     drop_title: "यहाँ एक <strong>.epub</strong> फ़ाइल खींचें",
     drop_or: "या",
@@ -333,7 +333,7 @@ const I18N_TRANSLATIONS = {
   zh: {
     meta: { name: "中文", flag: "🇨🇳" },
     page_title: "FNX EPUB",
-    app_title: "FNX EPUB",
+    app_title: '<span class="brand-fnx">FNX</span> <span class="brand-epub-badge">EPUB</span>',
     app_subtitle: "EPUB 电子书阅读器",
     drop_title: "拖拽 <strong>.epub</strong> 文件到这里",
     drop_or: "或",
@@ -399,7 +399,7 @@ const I18N_TRANSLATIONS = {
   ja: {
     meta: { name: "日本語", flag: "🇯🇵" },
     page_title: "FNX EPUB",
-    app_title: "FNX EPUB",
+    app_title: '<span class="brand-fnx">FNX</span> <span class="brand-epub-badge">EPUB</span>',
     app_subtitle: "EPUB 電子書籍リーダー",
     drop_title: "ここに <strong>.epub</strong> ファイルをドロップ",
     drop_or: "または",

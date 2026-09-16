@@ -2,6 +2,8 @@
 
 Lector de libros electrónicos EPUB moderno, ligero y 100% estático (Client-Side). Diseñado para ejecutarse directamente en el navegador sin necesidad de servidores de backend, altamente optimizado para su despliegue en **GitHub Pages** u hosting estático.
 
+> 🌐 **Demostración en vivo:** La demostración de **WhatAUTH** y acceso por **código QR** se puede ver en **[https://epub.fenix.ninja/](https://epub.fenix.ninja/)**.
+
 ---
 
 ## 🌟 Características Destacadas
@@ -99,6 +101,12 @@ Este proyecto utiliza tecnologías web abiertas y las siguientes librerías de t
 - **[EPUB.js](https://github.com/futurepress/epub.js)** ([Documentación y Web Oficial](https://epubjs.org/)): Motor JavaScript para el análisis y renderizado de publicaciones digitales EPUB en el navegador.
 - **[JSZip](https://stuk.github.io/jszip/)** ([Repositorio Oficial](https://github.com/Stuk/jszip)): Biblioteca de descompresión y lectura de archivos `.zip` y paquetes EPUB directamente en JavaScript.
 - **HTML5, CSS3 & JavaScript (ES6+):** Arquitectura sin empaquetadores ni dependencias de compilación en tiempo de ejecución.
+
+---
+
+## 🎨 Inspiraciones
+
+- **Fondo animado infinito:** El efecto de fondo con desplazamiento infinito continuo implementado en la pantalla de inicio está inspirado en la creación de **[carterfromsl](https://codepen.io/carterfromsl/pen/OJOLNyd)** en CodePen.
 
 ---
 
