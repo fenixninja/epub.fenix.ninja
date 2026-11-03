@@ -415,6 +415,52 @@ body {
   box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 25%, transparent);
 }
 
+.drop-zone .btn.primary {
+  background: var(--brand-mint);
+  color: var(--brand-charcoal);
+  border: 2.5px solid var(--brand-charcoal);
+  box-shadow: 2px 2.5px 0px var(--brand-charcoal);
+  font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  border-radius: 12px;
+  padding: 10px 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  user-select: none;
+  cursor: pointer;
+}
+
+.drop-zone .btn.primary:hover {
+  background: var(--brand-mint-dark);
+  color: var(--brand-charcoal);
+  transform: translateY(-2px);
+  box-shadow: 2.5px 3.5px 0px var(--brand-charcoal);
+  filter: none;
+}
+
+.drop-zone .btn.primary:active {
+  transform: translateY(1px);
+  box-shadow: 1px 1px 0px var(--brand-charcoal);
+}
+
+[data-theme="dark"] .drop-zone .btn.primary {
+  background: #7ec4a0;
+  border-color: #1a1a24;
+  color: #15151c;
+  box-shadow: 2px 2.5px 0px #121218;
+}
+
+[data-theme="sepia"] .drop-zone .btn.primary {
+  background: #89c5a5;
+  border-color: #3d2f23;
+  color: #3d2f23;
+  box-shadow: 2px 2.5px 0px #3d2f23;
+}
+
 .drop-icon {
   font-size: 2.4rem;
   margin-bottom: 12px;
@@ -513,10 +559,10 @@ body {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  background: color-mix(in srgb, var(--accent) 8%, var(--panel-bg));
-  border: 1.5px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  gap: 14px;
+  padding: 12px 18px;
+  background: color-mix(in srgb, var(--brand-mint) 14%, var(--panel-bg));
+  border: 1.5px solid color-mix(in srgb, var(--brand-mint-dark) 40%, var(--border));
   border-radius: var(--radius);
   color: var(--text);
   cursor: pointer;
@@ -528,46 +574,27 @@ body {
 
 .featured-book-btn:hover {
   transform: translateY(-2px);
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 14%, var(--panel-bg));
-  box-shadow: 0 6px 16px color-mix(in srgb, var(--accent) 20%, transparent);
+  border-color: var(--brand-mint-dark);
+  background: color-mix(in srgb, var(--brand-mint) 24%, var(--panel-bg));
+  box-shadow: 0 6px 18px rgba(110, 183, 144, 0.28);
 }
 
 .featured-book-btn:active {
   transform: translateY(0);
 }
 
-.featured-book-qr-preview {
-  width: 46px;
-  height: 46px;
-  background: #ffffff;
-  border-radius: 8px;
-  border: 1.5px solid color-mix(in srgb, var(--accent) 40%, transparent);
-  display: flex;
+.featured-book-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+  flex-shrink: 0;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  padding: 2px;
-}
-
-.featured-book-qr-preview svg,
-.featured-book-qr-preview canvas {
-  width: 100% !important;
-  height: 100% !important;
-  display: block;
-}
-
-.featured-book-qr-preview .qr-placeholder-icon {
-  font-size: 1.4rem;
-  line-height: 1;
-}
-
-.featured-book-icon {
-  font-size: 1.5rem;
-  line-height: 1;
-  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--brand-mint) 30%, transparent);
+  border: 1.5px solid color-mix(in srgb, var(--brand-mint-dark) 35%, transparent);
 }
 
 .featured-book-info {
@@ -578,23 +605,24 @@ body {
 }
 
 .featured-book-badge {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
+  font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--accent);
+  letter-spacing: 0.08em;
+  color: var(--brand-mint-dark);
 }
 
 .featured-book-title {
-  font-size: 0.92rem;
+  font-size: 0.94rem;
   color: var(--text);
   margin-top: 2px;
   line-height: 1.3;
 }
 
 .featured-book-title strong {
-  color: var(--accent);
-  font-weight: 600;
+  color: var(--brand-mint-dark);
+  font-weight: 700;
 }
 
 .featured-book-sub {
@@ -607,8 +635,8 @@ body {
 }
 
 .featured-book-arrow {
-  font-size: 1.1rem;
-  color: var(--accent);
+  font-size: 1.2rem;
+  color: var(--brand-mint-dark);
   font-weight: bold;
   transition: transform 0.2s ease;
   flex-shrink: 0;
@@ -1500,6 +1528,108 @@ body {
 @keyframes popIn {
   from { opacity: 0; transform: scale(0.9); }
   to { opacity: 1; transform: scale(1); }
+}
+
+/* Tarjeta de Bienvenida Personalizada en Modal */
+.modal-welcome-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  background: color-mix(in srgb, var(--brand-mint) 20%, var(--panel-bg));
+  border: 2px solid var(--brand-charcoal);
+  border-radius: 14px;
+  box-shadow: 2px 2.5px 0px var(--brand-charcoal);
+  animation: popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.welcome-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--brand-charcoal);
+}
+
+.welcome-badge strong {
+  color: var(--brand-fnx);
+  font-family: 'Alfa Slab One', 'Courier Prime', serif;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 0px var(--brand-charcoal);
+}
+
+.welcome-phone-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--brand-charcoal);
+  color: var(--brand-mint);
+  font-family: 'Fredoka', monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.welcome-sub {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+[data-theme="dark"] .modal-welcome-card {
+  background: #18221c;
+  border-color: #34d399;
+  box-shadow: 2px 2.5px 0px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .welcome-badge {
+  color: #e8e8e8;
+}
+
+[data-theme="dark"] .welcome-phone-tag {
+  background: #101613;
+  color: #34d399;
+}
+
+/* Pastilla de bienvenida en la barra superior del lector */
+.reader-welcome-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: var(--brand-mint);
+  border: 1.5px solid var(--brand-charcoal);
+  border-radius: 999px;
+  box-shadow: 1.5px 2px 0px var(--brand-charcoal);
+  font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--brand-charcoal);
+  user-select: none;
+  margin-left: 10px;
+  flex-shrink: 0;
+  animation: popIn 0.3s ease;
+}
+
+[data-theme="dark"] .reader-welcome-pill {
+  background: #7ec4a0;
+  border-color: #1a1a24;
+  color: #15151c;
+  box-shadow: 1.5px 2px 0px #121218;
+}
+
+[data-theme="sepia"] .reader-welcome-pill {
+  background: #89c5a5;
+  border-color: #3d2f23;
+  color: #3d2f23;
+  box-shadow: 1.5px 2px 0px #3d2f23;
 }
 
 .modal-user-pill {

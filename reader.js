@@ -836,27 +836,7 @@
   function renderWhatAuthQRs(walink) {
     if (!walink || typeof QRCodeStyling === 'undefined') return;
 
-    // 1. Render en el botón miniatura de la pantalla principal con colores FNX (#ED7A82 / #2A2A35)
-    const miniContainer = document.getElementById('btn-qr-preview');
-    if (miniContainer) {
-      miniContainer.innerHTML = '';
-      try {
-        const miniQr = new QRCodeStyling({
-          width: 44,
-          height: 44,
-          type: 'svg',
-          data: walink,
-          margin: 1,
-          dotsOptions: { color: '#2A2A35', type: 'rounded' },
-          cornersSquareOptions: { color: '#ED7A82', type: 'extra-rounded' },
-          cornersDotOptions: { color: '#ED7A82', type: 'dot' },
-          backgroundOptions: { color: '#ffffff' }
-        });
-        miniQr.append(miniContainer);
-      } catch (_) {}
-    }
-
-    // 2. Render en el contenedor grande del modal
+    // Render en el contenedor del modal WhatAuth
     const modalContainer = document.getElementById('modal-qr-container');
     const modalWaLink = document.getElementById('modal-whatsapp-link');
     if (modalWaLink) {
@@ -895,7 +875,6 @@
 
     const statusWaiting = document.getElementById('modal-status-waiting');
     const statusVerified = document.getElementById('modal-status-verified');
-    const userPill = document.getElementById('modal-user-pill');
     const userNameEl = document.getElementById('modal-user-name');
     const userPhoneEl = document.getElementById('modal-user-phone');
 
@@ -903,20 +882,35 @@
     if (statusVerified) statusVerified.classList.remove('hidden');
 
     const userObj = data?.user || {};
-    const rawName = userObj.name || data?.senderName || data?.pushName || 'Lector Verificado';
+    const rawName = userObj.name || data?.senderName || data?.pushName || 'Lector';
+    const cleanName = String(rawName).trim();
     const rawPhone = userObj.phone || data?.senderPhone || data?.phone || WHATAUTH_CONFIG.phone;
 
-    if (userNameEl) userNameEl.textContent = String(rawName).trim();
+    if (userNameEl) userNameEl.textContent = cleanName;
     if (userPhoneEl) userPhoneEl.textContent = '🔒 ' + maskPhoneNumber(rawPhone);
-    if (userPill) userPill.classList.remove('hidden');
 
-    // Apertura automática tras 1.2s
+    // Personalizar saludo con tipografía y branding según idioma activo
+    const greetingEl = document.getElementById('welcome-greeting-text');
+    if (greetingEl) {
+      const template = (window.i18n && typeof window.i18n.t === 'function')
+        ? window.i18n.t('whatauth_welcome_greeting', '¡Bienvenido, {name}! 📖✨')
+        : '¡Bienvenido, {name}! 📖✨';
+      greetingEl.innerHTML = template.replace('{name}', `<strong id="modal-user-name">${cleanName}</strong>`);
+    }
+
+    // Activar pastilla personalizada de bienvenida en el toolbar del lector
+    const readerWelcomePill = document.getElementById('reader-welcome-pill');
+    const readerWelcomeName = document.getElementById('reader-welcome-name');
+    if (readerWelcomeName) readerWelcomeName.textContent = cleanName;
+    if (readerWelcomePill) readerWelcomePill.classList.remove('hidden');
+
+    // Apertura automática del libro tras 1.4s para disfrutar la bienvenida
     setTimeout(() => {
       closeWhatAuthModal();
       const loadWhatAuthBtn = document.getElementById('load-whatauth-btn');
       const bookUrl = loadWhatAuthBtn?.dataset.bookUrl || './libros/demo.epub';
       loadBookFromUrl(bookUrl, 'WhatAUTH.epub');
-    }, 1200);
+    }, 1400);
   }
 
   function openWhatAuthModal() {
@@ -933,15 +927,14 @@
     // Restaurar estados UI
     const statusWaiting = document.getElementById('modal-status-waiting');
     const statusVerified = document.getElementById('modal-status-verified');
-    const userPill = document.getElementById('modal-user-pill');
     if (statusWaiting) statusWaiting.classList.remove('hidden');
     if (statusVerified) statusVerified.classList.add('hidden');
-    if (userPill) userPill.classList.add('hidden');
 
     modal.classList.remove('hidden');
 
-    // Walink con fallback dinámico garantizado
-    const defaultWalink = `https://wa.me/${WHATAUTH_CONFIG.phone}?text=` + encodeURIComponent('WhatauthBook 📖✨ ' + Math.random().toString(36).substring(2, 8));
+    // Walink con fallback dinámico garantizado (Whatauth book N-xxx 📖✨)
+    const pin = 'N-' + Math.floor(100 + Math.random() * 900);
+    const defaultWalink = `https://wa.me/${WHATAUTH_CONFIG.phone}?text=` + encodeURIComponent(`Whatauth book ${pin} 📖✨`);
     const activeWalink = (currentWhatAuthSession && currentWhatAuthSession.walink) ? currentWhatAuthSession.walink : defaultWalink;
     renderWhatAuthQRs(activeWalink);
 
@@ -994,6 +987,8 @@
     viewer.innerHTML = "";
     tocList.innerHTML = "";
     bookTitle.dataset.hasLoadedBook = "";
+    const readerWelcomePill = document.getElementById("reader-welcome-pill");
+    if (readerWelcomePill) readerWelcomePill.classList.add("hidden");
     readerScreen.classList.add("hidden");
     startScreen.classList.remove("hidden");
     document.title = window.i18n ? window.i18n.t("page_title", "Lector EPUB · GitHub Pages") : "Lector EPUB · GitHub Pages";
@@ -1067,7 +1062,8 @@
   // Inicializar WhatAuth Pixel Socket & Previsualización
   try {
     initWhatAuthSocket();
-    const defaultWalink = `https://wa.me/${WHATAUTH_CONFIG.phone}?text=` + encodeURIComponent('WhatauthBook 📖✨ demo');
+    const defaultPin = 'N-' + Math.floor(100 + Math.random() * 900);
+    const defaultWalink = `https://wa.me/${WHATAUTH_CONFIG.phone}?text=` + encodeURIComponent(`Whatauth book ${defaultPin} 📖✨`);
     renderWhatAuthQRs(defaultWalink);
   } catch (e) {
     console.warn('[WhatAuth] Error en arranque:', e);
