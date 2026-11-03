@@ -836,7 +836,7 @@
   function renderWhatAuthQRs(walink) {
     if (!walink || typeof QRCodeStyling === 'undefined') return;
 
-    // 1. Render en el botón miniatura de la pantalla principal
+    // 1. Render en el botón miniatura de la pantalla principal con colores FNX (#ED7A82 / #2A2A35)
     const miniContainer = document.getElementById('btn-qr-preview');
     if (miniContainer) {
       miniContainer.innerHTML = '';
@@ -847,9 +847,9 @@
           type: 'svg',
           data: walink,
           margin: 1,
-          dotsOptions: { color: '#1F4594', type: 'rounded' },
-          cornersSquareOptions: { color: '#FE6C27', type: 'extra-rounded' },
-          cornersDotOptions: { color: '#1F4594', type: 'dot' },
+          dotsOptions: { color: '#2A2A35', type: 'rounded' },
+          cornersSquareOptions: { color: '#ED7A82', type: 'extra-rounded' },
+          cornersDotOptions: { color: '#ED7A82', type: 'dot' },
           backgroundOptions: { color: '#ffffff' }
         });
         miniQr.append(miniContainer);
@@ -874,11 +874,11 @@
           image: WHATAUTH_CONFIG.logoUrl || undefined,
           margin: 1,
           qrOptions: { mode: 'Byte', errorCorrectionLevel: 'Q' },
-          dotsOptions: { color: '#1F4594', type: 'rounded' },
+          dotsOptions: { color: '#2A2A35', type: 'rounded' },
           backgroundOptions: { color: '#ffffff' },
           imageOptions: { crossOrigin: 'anonymous', margin: 2, imageSize: 0.22 },
-          cornersSquareOptions: { color: '#FE6C27', type: 'extra-rounded' },
-          cornersDotOptions: { color: '#1F4594', type: 'dot' }
+          cornersSquareOptions: { color: '#ED7A82', type: 'extra-rounded' },
+          cornersDotOptions: { color: '#ED7A82', type: 'dot' }
         });
         modalQr.append(modalContainer);
       } catch (err) {
@@ -925,6 +925,11 @@
 
     isWhatAuthVerified = false;
 
+    // Asegurar que todos los textos se traduzcan de inmediato al idioma activo en ese momento
+    if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+      window.i18n.applyTranslations();
+    }
+
     // Restaurar estados UI
     const statusWaiting = document.getElementById('modal-status-waiting');
     const statusVerified = document.getElementById('modal-status-verified');
@@ -963,15 +968,6 @@
   const closeWhatAuthModalBtn = $("#close-whatauth-modal");
   if (closeWhatAuthModalBtn) {
     closeWhatAuthModalBtn.addEventListener("click", closeWhatAuthModal);
-  }
-
-  const modalSkipBtn = $("#modal-skip-btn");
-  if (modalSkipBtn) {
-    modalSkipBtn.addEventListener("click", () => {
-      closeWhatAuthModal();
-      const bookUrl = loadWhatAuthBtn?.dataset.bookUrl || "./libros/demo.epub";
-      loadBookFromUrl(bookUrl, "WhatAUTH.epub");
-    });
   }
 
   const whatauthModal = $("#whatauth-modal");

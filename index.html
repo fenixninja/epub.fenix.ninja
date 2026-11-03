@@ -33,7 +33,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1.2.0" />
+  <link rel="stylesheet" href="style.css?v=1.2.1" />
   <!-- Interceptar 'unload' y redirigir a 'pagehide' para cumplir con Permissions-Policy y compatibilidad con bfcache -->
   <script>
     (function () {
@@ -52,7 +52,7 @@
   <!-- JSZip + epub.js desde CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js"></script>
-  <script src="i18n.js?v=1.2.0"></script>
+  <script src="i18n.js?v=1.2.1"></script>
   <!-- WhatAuth Pixel Dependencies: Socket.IO & QRCodeStyling -->
   <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
   <script src="vendor/qr-code-styling.js"></script>
@@ -279,7 +279,7 @@
       <div class="modal-header">
         <div class="modal-brand-badge">
           <span class="modal-emoji">📖✨</span>
-          <h2 id="whatauth-modal-title" class="modal-title font-heading" data-i18n="whatauth_modal_title">WhatauthBook 📖✨</h2>
+          <h2 id="whatauth-modal-title" class="modal-title font-heading" data-i18n="whatauth_modal_title">WhatauthBook</h2>
         </div>
         <p class="modal-subtitle" data-i18n="whatauth_modal_sub">Escanea con WhatsApp para desbloquear y leer gratis</p>
       </div>
@@ -310,9 +310,6 @@
           <span class="wa-icon">💬</span>
           <span data-i18n="whatauth_modal_direct_btn">Abrir WhatsApp directamente</span>
         </a>
-        <button type="button" id="modal-skip-btn" class="btn-skip-link" data-i18n="whatauth_modal_skip">
-          Continuar al libro directo →
-        </button>
       </div>
     </div>
   </div>
@@ -337,7 +334,7 @@
     </div>
   </div>
 
-  <script src="reader.js?v=1.2.0"></script>
+  <script src="reader.js?v=1.2.1"></script>
   <!-- Service Worker Registration para PWA -->
   <script>
     if ('serviceWorker' in navigator) {
