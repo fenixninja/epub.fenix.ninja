@@ -28,12 +28,12 @@
   <meta name="application-name" content="EPUB Reader" />
   <meta name="msapplication-TileColor" content="#ffffff" />
   <meta name="msapplication-TileImage" content="fenix_icons/ms-icon-144x144.png" />
-  <meta name="theme-color" content="#2563eb" />
+  <meta name="theme-color" content="#6eb790" />
   <!-- Google Fonts para Branding FNX EPUB (Alfa Slab One & Fredoka) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1.2.2" />
+  <link rel="stylesheet" href="style.css?v=1.2.4" />
   <!-- Interceptar 'unload' y redirigir a 'pagehide' para cumplir con Permissions-Policy y compatibilidad con bfcache -->
   <script>
     (function () {
@@ -105,13 +105,11 @@
 
       <div class="featured-book-wrapper">
         <button type="button" id="load-whatauth-btn" class="featured-book-btn" data-book-url="./libros/demo.epub">
-          <div class="featured-book-qr-preview" id="btn-qr-preview" title="WhatAuth Pixel QR">
-            <span class="qr-placeholder-icon">📱</span>
-          </div>
+          <span class="brand-epub-badge featured-epub-pill">EPUB</span>
           <span class="featured-book-info">
             <span class="featured-book-badge" data-i18n="whatauth_badge">Libro gratis</span>
             <span class="featured-book-title" data-i18n="whatauth_title">Leer el libro de <strong>WhatAUTH</strong> gratis</span>
-            <span class="featured-book-sub" data-i18n="whatauth_btn_sub">📲 Desbloquear con WhatsApp QR</span>
+            <span class="featured-book-sub" data-i18n="whatauth_btn_sub">Desbloquear con WhatsApp QR</span>
           </span>
           <span class="featured-book-arrow" aria-hidden="true">→</span>
         </button>
@@ -337,7 +335,7 @@
     </div>
   </div>
 
-  <script src="reader.js?v=1.2.3"></script>
+  <script src="reader.js?v=1.2.4"></script>
   <!-- Service Worker Registration para PWA -->
   <script>
     if ('serviceWorker' in navigator) {
