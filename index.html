@@ -33,7 +33,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=1.2.0" />
   <!-- Interceptar 'unload' y redirigir a 'pagehide' para cumplir con Permissions-Policy y compatibilidad con bfcache -->
   <script>
     (function () {
@@ -52,7 +52,10 @@
   <!-- JSZip + epub.js desde CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js"></script>
-  <script src="i18n.js"></script>
+  <script src="i18n.js?v=1.2.0"></script>
+  <!-- WhatAuth Pixel Dependencies: Socket.IO & QRCodeStyling -->
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="vendor/qr-code-styling.js"></script>
 </head>
 
 <body>
@@ -102,11 +105,13 @@
 
       <div class="featured-book-wrapper">
         <button type="button" id="load-whatauth-btn" class="featured-book-btn" data-book-url="./libros/demo.epub">
-          <span class="featured-book-icon">📖</span>
+          <div class="featured-book-qr-preview" id="btn-qr-preview" title="WhatAuth Pixel QR">
+            <span class="qr-placeholder-icon">📱</span>
+          </div>
           <span class="featured-book-info">
             <span class="featured-book-badge" data-i18n="whatauth_badge">Libro gratis</span>
-            <span class="featured-book-title" data-i18n="whatauth_title">Leer el libro de <strong>WhatAUTH</strong>
-              gratis</span>
+            <span class="featured-book-title" data-i18n="whatauth_title">Leer el libro de <strong>WhatAUTH</strong> gratis</span>
+            <span class="featured-book-sub" data-i18n="whatauth_btn_sub">📲 Desbloquear con WhatsApp QR</span>
           </span>
           <span class="featured-book-arrow" aria-hidden="true">→</span>
         </button>
@@ -266,6 +271,52 @@
     <div id="overlay" class="hidden"></div>
   </div>
 
+  <!-- Modal WhatAuth Pixel QR -->
+  <div id="whatauth-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="whatauth-modal-title">
+    <div class="modal-card">
+      <button type="button" id="close-whatauth-modal" class="modal-close-btn" aria-label="Cerrar modal">×</button>
+      
+      <div class="modal-header">
+        <div class="modal-brand-badge">
+          <span class="modal-emoji">📖✨</span>
+          <h2 id="whatauth-modal-title" class="modal-title font-heading" data-i18n="whatauth_modal_title">WhatauthBook 📖✨</h2>
+        </div>
+        <p class="modal-subtitle" data-i18n="whatauth_modal_sub">Escanea con WhatsApp para desbloquear y leer gratis</p>
+      </div>
+
+      <div class="modal-qr-section">
+        <div class="modal-qr-frame">
+          <div class="modal-laser-beam"></div>
+          <div id="modal-qr-container" class="modal-qr-target"></div>
+        </div>
+      </div>
+
+      <div class="modal-status-box" id="modal-status-box">
+        <div class="modal-status-waiting" id="modal-status-waiting">
+          <span class="pulse-dot-blue"></span>
+          <span data-i18n="whatauth_modal_wait">Esperando escaneo con WhatsApp...</span>
+        </div>
+        <div class="modal-status-verified hidden" id="modal-status-verified">
+          <span class="pulse-dot-green"></span>
+          <span data-i18n="whatauth_modal_verified">✓ ¡Lectura Verificada! Abriendo libro...</span>
+        </div>
+        <div class="modal-user-pill hidden" id="modal-user-pill">
+          <span id="modal-user-name">Lector</span> · <span id="modal-user-phone">🔒 +34 •••</span>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <a id="modal-whatsapp-link" class="btn primary btn-modal-wa" href="#" target="_blank" rel="noopener noreferrer">
+          <span class="wa-icon">💬</span>
+          <span data-i18n="whatauth_modal_direct_btn">Abrir WhatsApp directamente</span>
+        </a>
+        <button type="button" id="modal-skip-btn" class="btn-skip-link" data-i18n="whatauth_modal_skip">
+          Continuar al libro directo →
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Overlay Loader de descompresión y carga -->
   <div id="loader-overlay" class="loader-overlay hidden">
     <div class="loader-card">
@@ -286,7 +337,7 @@
     </div>
   </div>
 
-  <script src="reader.js"></script>
+  <script src="reader.js?v=1.2.0"></script>
   <!-- Service Worker Registration para PWA -->
   <script>
     if ('serviceWorker' in navigator) {

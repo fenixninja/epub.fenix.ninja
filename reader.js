@@ -749,12 +749,237 @@
     if (e.key === "Enter") loadUrlBtn.click();
   });
 
-  // Carga del libro de WhatAUTH (por defecto demo.epub hasta subir el libro final)
+  /* ========================================================
+     WHATSAUTH PIXEL & MODAL (WhatauthBook 📖✨)
+     ======================================================== */
+  const WHATAUTH_CONFIG = {
+    phone: '34627118121',
+    domain: 'epub.fenix.ninja',
+    wsUrl: 'https://api.whatauth.com',
+    logoUrl: 'fenix_icons/favicon-96x96.png'
+  };
+
+  let whatAuthSocket = null;
+  let currentWhatAuthSession = null;
+  let isWhatAuthVerified = false;
+
+  function maskPhoneNumber(phone) {
+    if (!phone) return '+34 ••• •• 121';
+    const clean = String(phone).replace(/[^0-9]/g, '');
+    if (clean.length < 4) return '••••' + clean;
+    if (clean.startsWith('34') && clean.length === 11) {
+      return `+34 ••• •• ${clean.slice(-3)}`;
+    }
+    if (clean.length === 9) {
+      return `+34 ••• •• ${clean.slice(-3)}`;
+    }
+    if (clean.length > 8) {
+      const countryCode = clean.slice(0, 2);
+      return `+${countryCode} ••• •• ${clean.slice(-3)}`;
+    }
+    return `••• ${clean.slice(-3)}`;
+  }
+
+  function initWhatAuthSocket() {
+    if (whatAuthSocket) return whatAuthSocket;
+    if (typeof io === 'undefined') {
+      console.warn('[WhatAuth WS] Socket.IO no disponible');
+      return null;
+    }
+
+    try {
+      const socket = io(WHATAUTH_CONFIG.wsUrl, {
+        transports: ['websocket', 'polling'],
+        reconnection: true,
+        reconnectionAttempts: 10,
+        reconnectionDelay: 1000
+      });
+
+      socket.on('connect', () => {
+        console.log('[WhatAuth WS] Conectado a', WHATAUTH_CONFIG.wsUrl, 'ID:', socket.id);
+        socket.emit('subscribe_pixel', { domain: WHATAUTH_CONFIG.domain });
+        socket.emit('req_pixel_qr', { domain: WHATAUTH_CONFIG.domain, id: 'WhatauthBook' });
+      });
+
+      socket.on('qr_ready', (data) => {
+        if (!data || !data.success) return;
+        currentWhatAuthSession = data;
+
+        let finalWalink = data.walink || '';
+        if (WHATAUTH_CONFIG.phone && finalWalink) {
+          try {
+            const u = new URL(finalWalink);
+            if (u.hostname === 'wa.me') {
+              u.pathname = `/${WHATAUTH_CONFIG.phone}`;
+            } else {
+              u.searchParams.set('phone', WHATAUTH_CONFIG.phone);
+            }
+            finalWalink = u.toString();
+          } catch (_) {}
+        }
+        currentWhatAuthSession.walink = finalWalink;
+
+        renderWhatAuthQRs(finalWalink);
+      });
+
+      socket.on('res_pixel_qr', handleWhatAuthScanVerified);
+      socket.on('qr_verified', handleWhatAuthScanVerified);
+
+      whatAuthSocket = socket;
+      return socket;
+    } catch (err) {
+      console.warn('[WhatAuth] Error inicializando socket:', err);
+      return null;
+    }
+  }
+
+  function renderWhatAuthQRs(walink) {
+    if (!walink || typeof QRCodeStyling === 'undefined') return;
+
+    // 1. Render en el botón miniatura de la pantalla principal
+    const miniContainer = document.getElementById('btn-qr-preview');
+    if (miniContainer) {
+      miniContainer.innerHTML = '';
+      try {
+        const miniQr = new QRCodeStyling({
+          width: 44,
+          height: 44,
+          type: 'svg',
+          data: walink,
+          margin: 1,
+          dotsOptions: { color: '#1F4594', type: 'rounded' },
+          cornersSquareOptions: { color: '#FE6C27', type: 'extra-rounded' },
+          cornersDotOptions: { color: '#1F4594', type: 'dot' },
+          backgroundOptions: { color: '#ffffff' }
+        });
+        miniQr.append(miniContainer);
+      } catch (_) {}
+    }
+
+    // 2. Render en el contenedor grande del modal
+    const modalContainer = document.getElementById('modal-qr-container');
+    const modalWaLink = document.getElementById('modal-whatsapp-link');
+    if (modalWaLink) {
+      modalWaLink.href = walink;
+    }
+
+    if (modalContainer) {
+      modalContainer.innerHTML = '';
+      try {
+        const modalQr = new QRCodeStyling({
+          width: 194,
+          height: 194,
+          type: 'svg',
+          data: walink,
+          image: WHATAUTH_CONFIG.logoUrl || undefined,
+          margin: 1,
+          qrOptions: { mode: 'Byte', errorCorrectionLevel: 'Q' },
+          dotsOptions: { color: '#1F4594', type: 'rounded' },
+          backgroundOptions: { color: '#ffffff' },
+          imageOptions: { crossOrigin: 'anonymous', margin: 2, imageSize: 0.22 },
+          cornersSquareOptions: { color: '#FE6C27', type: 'extra-rounded' },
+          cornersDotOptions: { color: '#1F4594', type: 'dot' }
+        });
+        modalQr.append(modalContainer);
+      } catch (err) {
+        console.warn('[WhatAuth] Error renderizando QR en modal:', err);
+      }
+    }
+  }
+
+  function handleWhatAuthScanVerified(data) {
+    if (isWhatAuthVerified) return;
+    isWhatAuthVerified = true;
+
+    console.log('[WhatAuth] 🎯 ¡Escaneo de libro verificado!', data);
+
+    const statusWaiting = document.getElementById('modal-status-waiting');
+    const statusVerified = document.getElementById('modal-status-verified');
+    const userPill = document.getElementById('modal-user-pill');
+    const userNameEl = document.getElementById('modal-user-name');
+    const userPhoneEl = document.getElementById('modal-user-phone');
+
+    if (statusWaiting) statusWaiting.classList.add('hidden');
+    if (statusVerified) statusVerified.classList.remove('hidden');
+
+    const userObj = data?.user || {};
+    const rawName = userObj.name || data?.senderName || data?.pushName || 'Lector Verificado';
+    const rawPhone = userObj.phone || data?.senderPhone || data?.phone || WHATAUTH_CONFIG.phone;
+
+    if (userNameEl) userNameEl.textContent = String(rawName).trim();
+    if (userPhoneEl) userPhoneEl.textContent = '🔒 ' + maskPhoneNumber(rawPhone);
+    if (userPill) userPill.classList.remove('hidden');
+
+    // Apertura automática tras 1.2s
+    setTimeout(() => {
+      closeWhatAuthModal();
+      const loadWhatAuthBtn = document.getElementById('load-whatauth-btn');
+      const bookUrl = loadWhatAuthBtn?.dataset.bookUrl || './libros/demo.epub';
+      loadBookFromUrl(bookUrl, 'WhatAUTH.epub');
+    }, 1200);
+  }
+
+  function openWhatAuthModal() {
+    const modal = document.getElementById('whatauth-modal');
+    if (!modal) return;
+
+    isWhatAuthVerified = false;
+
+    // Restaurar estados UI
+    const statusWaiting = document.getElementById('modal-status-waiting');
+    const statusVerified = document.getElementById('modal-status-verified');
+    const userPill = document.getElementById('modal-user-pill');
+    if (statusWaiting) statusWaiting.classList.remove('hidden');
+    if (statusVerified) statusVerified.classList.add('hidden');
+    if (userPill) userPill.classList.add('hidden');
+
+    modal.classList.remove('hidden');
+
+    // Walink con fallback dinámico garantizado
+    const defaultWalink = `https://wa.me/${WHATAUTH_CONFIG.phone}?text=` + encodeURIComponent('WhatauthBook 📖✨ ' + Math.random().toString(36).substring(2, 8));
+    const activeWalink = (currentWhatAuthSession && currentWhatAuthSession.walink) ? currentWhatAuthSession.walink : defaultWalink;
+    renderWhatAuthQRs(activeWalink);
+
+    // Solicitar refresco en socket
+    if (whatAuthSocket && whatAuthSocket.connected) {
+      whatAuthSocket.emit('req_pixel_qr', { domain: WHATAUTH_CONFIG.domain, id: 'WhatauthBook' });
+    }
+  }
+
+  function closeWhatAuthModal() {
+    const modal = document.getElementById('whatauth-modal');
+    if (modal) modal.classList.add('hidden');
+  }
+
+  // Carga del libro de WhatAUTH con Modal Pixel QR
   const loadWhatAuthBtn = $("#load-whatauth-btn");
   if (loadWhatAuthBtn) {
     loadWhatAuthBtn.addEventListener("click", () => {
-      const bookUrl = loadWhatAuthBtn.dataset.bookUrl || "./libros/demo.epub";
+      openWhatAuthModal();
+    });
+  }
+
+  // Controles del Modal WhatAuth
+  const closeWhatAuthModalBtn = $("#close-whatauth-modal");
+  if (closeWhatAuthModalBtn) {
+    closeWhatAuthModalBtn.addEventListener("click", closeWhatAuthModal);
+  }
+
+  const modalSkipBtn = $("#modal-skip-btn");
+  if (modalSkipBtn) {
+    modalSkipBtn.addEventListener("click", () => {
+      closeWhatAuthModal();
+      const bookUrl = loadWhatAuthBtn?.dataset.bookUrl || "./libros/demo.epub";
       loadBookFromUrl(bookUrl, "WhatAUTH.epub");
+    });
+  }
+
+  const whatauthModal = $("#whatauth-modal");
+  if (whatauthModal) {
+    whatauthModal.addEventListener("click", (e) => {
+      if (e.target === whatauthModal) {
+        closeWhatAuthModal();
+      }
     });
   }
 
@@ -842,6 +1067,15 @@
   applyReadingMode(currentReadingMode);
   setBeelineEnabled(beelineEnabled);
   setBeelineGradient(beelineGradient);
+
+  // Inicializar WhatAuth Pixel Socket & Previsualización
+  try {
+    initWhatAuthSocket();
+    const defaultWalink = `https://wa.me/${WHATAUTH_CONFIG.phone}?text=` + encodeURIComponent('WhatauthBook 📖✨ demo');
+    renderWhatAuthQRs(defaultWalink);
+  } catch (e) {
+    console.warn('[WhatAuth] Error en arranque:', e);
+  }
 
   // Optional: auto-load from query string ?book=url
   const params = new URLSearchParams(location.search);
